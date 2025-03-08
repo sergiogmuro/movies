@@ -8,7 +8,7 @@ const MoviesGrid: React.FC = () => {
   const movies = useMovies();
 
   return (
-      <div>
+      <div className={styles.container}>
         <h1>10 de 2025</h1>
         <div className={styles.grid}>
           {movies.findMovies({year: 2025}, 10).map((movie: Movie, index) => (
