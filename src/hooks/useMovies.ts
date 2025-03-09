@@ -26,19 +26,19 @@ const useMovies = () => {
 
   useEffect(() => {
     // Intentamos obtener las películas de sessionStorage si ya están guardadas
-    const savedMovies = sessionStorage.getItem("movies");
-    if (savedMovies) {
-      // Si ya están en sessionStorage, las cargamos directamente
-      setMovies(JSON.parse(savedMovies));
-      setLoading(false);
-    } else {
+    // const savedMovies = sessionStorage.getItem("movies");
+    // if (savedMovies) {
+    //   // Si ya están en sessionStorage, las cargamos directamente
+    //   setMovies(JSON.parse(savedMovies));
+    //   setLoading(false);
+    // } else {
       // Si no están, las obtenemos desde el servidor o el CSV
       if (SERVERLESS) {
         fetchMoviesLocal();
       } else {
         fetchMovies();
       }
-    }
+    // }
   }, []);
 
   const fetchMoviesLocal = async () => {
