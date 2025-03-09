@@ -98,7 +98,7 @@ const useMovies = () => {
       const matchId = params.id ? movie.id === params.id : true;
 
       const matchTitle = params.title
-          ? movie.title.toLowerCase().includes(params.title.toLowerCase())
+          ? movie.name.toLowerCase().includes(params.title.toLowerCase())
           : true;
       const matchGenre = params.genre
           ? movie.genre.toLowerCase().includes(params.genre.toLowerCase())
