@@ -5,7 +5,6 @@ import readMoviesFromCSV from "./utils/csvReader";
 
 const PORT = 3001; // 👈⚠️ IMPORTANTE: Usa un puerto distinto a Vite (3000)
 
-// 🔹 Ruta para obtener las películas desde CSV
 app.get("/movies", async (req, res) => {
     try {
         const movies = await readMoviesFromCSV();

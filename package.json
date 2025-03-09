@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "Proyecto de ejemplo con nodemon",
   "main": "server.js",
+  "homepage": ".",
   "scripts": {
     "dev": "concurrently \"nodemon server.ts\" \"vite\"",
     "start": "node server.ts",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@types/papaparse": "^5.3.15",
@@ -30,6 +34,7 @@
     "@types/node": "^22.13.10",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
+    "gh-pages": "^6.3.0",
     "nodemon": "^3.1.9",
     "sass": "^1.85.1",
     "sass-loader": "^16.0.5",

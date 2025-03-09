@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Movie} from "../../types/Movie";
+import readMoviesFromCSV from "../../utils/csvReader";
 
 export const Categories = {
   "movies": 'Peliculas',
@@ -15,14 +16,55 @@ interface SearchParams {
   limit?: number;
 }
 
+const SERVERLESS = true;
+
 const useMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchMovies();
+    if (SERVERLESS) {
+      fetchMoviesLocal();
+    } else {
+      fetchMovies();
+    }
   }, []);
+  const fetchMoviesLocal = async () => {
+    try {
+      const response = await fetch("/public/movies.csv");
+      const text = await response.text();
+
+      const rows = text.split("\n").slice(1).filter(row => row.trim() !== "");
+      const movies = rows.map((row, index) => {
+        const columns = row.split(",");
+        return {
+          id: index,
+          name: columns[0] ?? "",
+          categoryName: columns[1] ?? "",
+          year: columns[2] ?? "",
+          file: columns[3] ?? "",
+          resolution: columns[4] ?? "",
+          language: columns[5] ?? "",
+          subtitled: columns[6] === "true",
+          url: columns[7] ?? "",
+          image: columns[8] || "https://www.shutterstock.com/image-vector/image-icon-600nw-211642900.jpg",
+          adult: columns[9] ?? "",
+          genre: columns[10] ?? "",
+          overview: columns[11] ?? "",
+          originalTitle: columns[12] ?? "",
+          originalLanguage: columns[13] ?? "",
+          releaseDate: columns[14] ?? "",
+          popularity: columns[15] ?? "",
+        };
+      });
+
+      setMovies(movies);
+    } catch (err) {
+      setError("Error al cargar las películas");
+      setLoading(false);
+    }
+  };
 
   const fetchMovies = async () => {
     try {

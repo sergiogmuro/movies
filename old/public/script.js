@@ -51,8 +51,6 @@ function renderContentList(content) {
 
 function handleItemClick(item) {
     // console.log(window.location.origin);
-    console.log(window.location.href)
-    console.log(item)
     if (item.url.endsWith("/")) {
         fetchFolderContent(item.name);
     } else if (item.url.endsWith(".mp4")) {

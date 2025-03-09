@@ -12,3 +12,11 @@ npm run dev
 ```shell
 node scraper.js
 ```
+
+
+## START DEPLY GITHUB PAGES
+```shell
+npm run build
+
+npm run deploy
+```

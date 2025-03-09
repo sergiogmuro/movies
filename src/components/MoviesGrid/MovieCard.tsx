@@ -11,7 +11,7 @@ interface MoviewCardInterface {
 
 const MovieCard = (movieDetails: MoviewCardInterface) => {
   const {movie, index} = movieDetails;
-  console.log(movie, movie.subtitled);
+
   return (
       <Link to={`/movie/${movie.id}`} key={index}>
         <div className={styles.movieCard}>
