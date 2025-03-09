@@ -95,6 +95,8 @@ a:hover {
 }
 
 .movie-details .header .genre,
+.movie-details .header .description,
+.movie-details .header .year,
 .movie-details .header .popularity {
   font-size: clamp(1rem, 2vw, 1.5rem);
 }
@@ -124,8 +126,22 @@ a:hover {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1.2rem;
 }
 
 .movie-details .buttons button:hover {
   background-color: #f40612;
+}
+
+@media (min-width: 1400px) {
+  .movieTitle {
+    font-size: 1.8rem;
+  }
+
+  .movieGenre,
+  .movieYear,
+  .movieDescription,
+  .moviePopularity {
+    font-size: 1.5rem;
+  }
 }
