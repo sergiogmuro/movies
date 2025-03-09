@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {Movie} from "../../types/Movie";
+import { useEffect, useState } from "react";
+import { Movie } from "../../types/Movie";
 import readMoviesFromCSV from "../../utils/csvReader";
 
 export const Categories = {
@@ -25,12 +25,22 @@ const useMovies = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (SERVERLESS) {
-      fetchMoviesLocal();
+    // Intentamos obtener las películas de sessionStorage si ya están guardadas
+    const savedMovies = sessionStorage.getItem("movies");
+    if (savedMovies) {
+      // Si ya están en sessionStorage, las cargamos directamente
+      setMovies(JSON.parse(savedMovies));
+      setLoading(false);
     } else {
-      fetchMovies();
+      // Si no están, las obtenemos desde el servidor o el CSV
+      if (SERVERLESS) {
+        fetchMoviesLocal();
+      } else {
+        fetchMovies();
+      }
     }
   }, []);
+
   const fetchMoviesLocal = async () => {
     try {
       const response = await fetch(MOVIES_CSV_PATH);
@@ -67,7 +77,11 @@ const useMovies = () => {
         };
       });
 
+      // Guardamos las películas en sessionStorage
+      sessionStorage.setItem("movies", JSON.stringify(movies));
+
       setMovies(movies);
+      setLoading(false);
     } catch (err) {
       setError("Error al cargar las películas");
       setLoading(false);
@@ -78,6 +92,9 @@ const useMovies = () => {
     try {
       const response = await fetch("/movies");
       const data = await response.json();
+
+      // Guardamos las películas en sessionStorage
+      sessionStorage.setItem("movies", JSON.stringify(data));
 
       setMovies(data);
       setLoading(false);
