@@ -20,8 +20,8 @@ const MovieCard = (movieDetails: MoviewCardInterface) => {
               alt={movie.name}
               className={styles.movieImage}
           />
-          <h2 className={styles.movieTitle}>{movie.name} {(movie.subtitled) ? '(SUB)' : ''}</h2>
-          <p className={styles.moviePopularity}>⭐ {movie?.year}</p>
+          <h2 className={styles.movieTitle}>{movie.name}</h2>
+          <p className={styles.moviePopularity}>⭐ {movie?.year} {movie.subtitled ? ' - Subtitled' : ''}</p>
           <p className={styles.movieGenre}>🎭 {movie?.genre}</p>
         </div>
       </Link>

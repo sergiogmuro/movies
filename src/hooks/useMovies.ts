@@ -38,7 +38,14 @@ const useMovies = () => {
 
       const rows = text.split("\n").slice(1).filter(row => row.trim() !== "");
       const movies = rows.map((row, index) => {
-        const columns = row.split(",");
+        const regex = /"(.*?)"|\s*([^",]+)\s*/g;
+        const columns = [];
+        let match;
+
+        while ((match = regex.exec(row)) !== null) {
+          columns.push(match[1] || match[2]);
+        }
+
         return {
           id: index,
           name: columns[0] ?? "",

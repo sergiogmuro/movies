@@ -10,8 +10,8 @@ a:hover {
 
 .container {
   padding: 16px;
-
 }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -22,18 +22,18 @@ a:hover {
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 .movieCard {
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 12px;
+  padding: 1rem; /* en lugar de 12px */
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 200px;
+  max-width: 420px;
   margin: 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -50,8 +50,9 @@ a:hover {
   border-radius: 8px;
 }
 
+/* 🎬 Títulos más grandes en pantallas grandes */
 .movieTitle {
-  font-size: 1rem;
+  font-size: clamp(1rem, 2vw, 1.5rem); /* Ajusta entre 16px y 24px */
   font-weight: bold;
   margin-top: 8px;
   color: #333;
@@ -61,16 +62,30 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+/* 🎭 Género con mejor legibilidad */
 .movieGenre {
   color: #4b5563;
-  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem); /* Ajusta entre 14px y 20px */
   text-align: center;
   margin-bottom: 4px;
 }
 
+/* ⭐ Popularidad con más impacto */
 .moviePopularity {
   color: #252525;
-  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 1.5vw, 1.5rem); /* Ajusta entre 14px y 24px */
   text-align: center;
   font-weight: bold;
+}
+
+/* 📺 Estilos para pantallas de TV */
+@media (min-width: 1400px) {
+  .movieTitle {
+    font-size: 1.8rem;
+  }
+
+  .movieGenre,
+  .moviePopularity {
+    font-size: 1.5rem;
+  }
 }
