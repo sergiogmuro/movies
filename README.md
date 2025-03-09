@@ -20,3 +20,6 @@ npm run build
 
 npm run deploy
 ```
+
+
+## IT IS DEPLOYED ON VERCEL ##

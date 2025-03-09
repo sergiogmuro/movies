@@ -16,7 +16,7 @@ const MovieCard = (movieDetails: MoviewCardInterface) => {
       <Link to={`/movie/${movie.id}`} key={index}>
         <div className={styles.movieCard}>
           <img
-              src={movie.image}
+              src={movie.image.replace('t/p/original', 't/p/w300')}
               alt={movie.name}
               className={styles.movieImage}
           />
