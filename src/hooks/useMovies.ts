@@ -16,7 +16,8 @@ interface SearchParams {
   limit?: number;
 }
 
-const SERVERLESS = true;
+const SERVERLESS = import.meta.env.VITE_USE_SERVERLESS === "true";
+const MOVIES_CSV_PATH = import.meta.env.VITE_MOVIES_CSV_PATH || "/public/movies.csv";
 
 const useMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -32,17 +33,8 @@ const useMovies = () => {
   }, []);
   const fetchMoviesLocal = async () => {
     try {
-      let text ='No movies found'
-      try {
-        const response = await fetch("/public/movies.csv");
-        text = await response.text();
-      } catch (e) {
-        try {
-          const response = await fetch("/public/movies.csv");
-          text = await response.text();
-        } catch (e) {
-        }
-      }
+      const response = await fetch(MOVIES_CSV_PATH);
+      const text = await response.text();
 
       const rows = text.split("\n").slice(1).filter(row => row.trim() !== "");
       const movies = rows.map((row, index) => {
