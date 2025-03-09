@@ -32,8 +32,17 @@ const useMovies = () => {
   }, []);
   const fetchMoviesLocal = async () => {
     try {
-      const response = await fetch("/public/movies.csv");
-      const text = await response.text();
+      let text ='No movies found'
+      try {
+        const response = await fetch("/public/movies.csv");
+        text = await response.text();
+      } catch (e) {
+        try {
+          const response = await fetch("/public/movies.csv");
+          text = await response.text();
+        } catch (e) {
+        }
+      }
 
       const rows = text.split("\n").slice(1).filter(row => row.trim() !== "");
       const movies = rows.map((row, index) => {
