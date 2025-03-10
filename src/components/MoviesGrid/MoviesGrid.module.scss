@@ -144,3 +144,48 @@ a:hover {
     font-size: 1.5rem;
   }
 }
+
+
+
+
+
+
+.scrollContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  scrollbar-width: none; // Oculta scrollbar en Firefox
+  -ms-overflow-style: none; // Oculta scrollbar en IE y Edge;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none; // Oculta scrollbar en Chrome y Safari
+}
+
+.movieCard {
+  flex: 0 0 auto;
+  width: 200px; // Ancho fijo de cada tarjeta
+  transition: transform 0.1s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.movieCard:hover {
+  transform: scale(1.02);
+  border: 2px solid #ff9800; // Color de borde al hacer hover
+  background-color: #ececec;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px 0;
+  padding: 10px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}

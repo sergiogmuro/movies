@@ -36,31 +36,29 @@ const MoviesGrid: React.FC = () => {
             </div>
         )}
 
-        {!isSearchOpen && filteredMovies.length == 0 && (
-          <>
-            <h1>No te pierdas 2025</h1>
-            <div className={styles.grid}>
-              {movies.findMovies({ year: 2025 }, 12).map((movie: Movie, index) => (
-                  <MovieCard movie={movie} index={index} />
-              ))}
-            </div>
+        {!isSearchOpen && filteredMovies.length === 0 && (
+            <>
+              <h1>No te pierdas 2025</h1>
+              <div className={styles.scrollContainer}>
+                {movies.findMovies({ year: 2025 }, 12).map((movie: Movie, index) => (
+                    <MovieCard key={movie.id} movie={movie} index={index} />
+                ))}
+              </div>
 
-            <h1>No te pierdas 2024</h1>
-            <div className={styles.grid}>
-              {movies.findMovies({ year: 2024 }, 8).map((movie: Movie, index) => (
-                  <MovieCard movie={movie} index={index} />
-              ))}
-            </div>
+              <h1>No te pierdas 2024</h1>
+              <div className={styles.scrollContainer}>
+                {movies.findMovies({ year: 2024 }, 8).map((movie: Movie, index) => (
+                    <MovieCard key={movie.id} movie={movie} index={index} />
+                ))}
+              </div>
 
-            <h1>Películas</h1>
-            <div className={styles.grid}>
-              {movies.findMovies({ category: Categories.movies }, 10000).map(
-                  (movie: Movie, index) => (
-                      <MovieCard movie={movie} index={index} />
-                  )
-              )}
-            </div>
-          </>
+              <h1>Películas</h1>
+              <div className={styles.grid}>
+                {movies.findMovies({ category: Categories.movies }).map((movie: Movie, index) => (
+                    <MovieCard key={movie.id} movie={movie} index={index} />
+                ))}
+              </div>
+            </>
         )}
 
         {/* Mostrar resultados de búsqueda si hay términos ingresados */}
@@ -69,7 +67,7 @@ const MoviesGrid: React.FC = () => {
               <h2>Resultados de búsqueda</h2>
               <div className={styles.grid}>
                 {filteredMovies.map((movie: Movie, index) => (
-                    <MovieCard movie={movie} index={index} />
+                    <MovieCard key={movie.id} movie={movie} index={index} />
                 ))}
               </div>
             </div>

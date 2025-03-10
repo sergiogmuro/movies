@@ -3,11 +3,21 @@ const cheerio = require('cheerio');
 const {createObjectCsvWriter} = require('csv-writer');
 
 const BASE_URL = 'https://www.innovatv.store/contenido/';
+const BASE_URL_CONTENT_ORDER = '?C=M;O=D';
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 const EXCLUDED_CATEGORIES = ['CINE CAM'];
 
+const date = new Date();
+const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}`;
+
 const csvWriter = createObjectCsvWriter({
-    path: 'public/movies' + new Date() + '.csv',
+    path: 'public/movies_' + formattedDate + '.csv',
     header: [
         {id: 'movieName', title: 'Name'},
         {id: 'categoryName', title: 'Category Name'},
@@ -63,7 +73,7 @@ async function scrapeIndex() {
 async function scrapeCategory(categoryUrl, categoryName) {
     console.log(`\n🔍 Explorando categoría: ${categoryName} - ${categoryUrl}`);
 
-    const $ = await fetchHTML(categoryUrl);
+    const $ = await fetchHTML(`${categoryUrl}/${BASE_URL_CONTENT_ORDER}`);
     if (!$) return;
 
     let movies = [];
@@ -174,8 +184,8 @@ function extractLanguage(file) {
 // https://www.themoviedb.org/settings/api
 const API_KEY = 'cbca3a9fc065e105bea70f3543b3d717';
 
-function getGenres() {
-    const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=es`;
+async function getGenres() {
+    const url = `${TMDB_BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=es`;
     try {
         return axios.get(url).then(data => {
             const genres = data.data.genres;
@@ -190,17 +200,17 @@ function getGenres() {
     }
 }
 
-const genreMap = getGenres();
+let genreMap = {};
 
 async function getMovieExtras(movieName) {
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(movieName)}`;
+    const url = `${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(movieName)}`;
 
     try {
         const {data} = await axios.get(url);
         if (data.results.length > 0) {
             const movie = data.results[0];
             const imageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
-            // const genres = movie.genre_ids.map(id => genreMap[id] || 'Desconocido');
+            const genres = movie.genre_ids.map(id => genreMap[id] || 'Desconocido');
 
             console.log(`🎬 Imagen de ${movie.title}: ${imageUrl}`);
             console.log(`🎭 Géneros: ${movie.genre_ids.join(', ')}`);
@@ -208,7 +218,7 @@ async function getMovieExtras(movieName) {
             return {
                 image: imageUrl,
                 adult: movie.adult,
-                genre: movie.genre_ids.join(', '),
+                genre: genres,
                 overview: movie.overview,
                 originalTitle: movie.original_title,
                 originalLanguage: movie.original_language,
@@ -223,5 +233,13 @@ async function getMovieExtras(movieName) {
     }
 }
 
-// Ejecutar el scraper
-scrapeIndex();
+async function initializeGenreMap() {
+    console.log("Resolviendo GENEROS!...")
+
+    genreMap = await getGenres();
+}
+
+// Llamamos esta función antes de ejecutar el scraper
+initializeGenreMap().then(() => {
+    scrapeIndex();
+});
