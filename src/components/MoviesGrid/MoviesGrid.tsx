@@ -40,14 +40,14 @@ const MoviesGrid: React.FC = () => {
             <>
               <h1>No te pierdas 2025</h1>
               <div className={styles.scrollContainer}>
-                {movies.findMovies({ year: 2025 }, 12).map((movie: Movie, index) => (
+                {movies.findMovies({ year: 2025 }, 20).map((movie: Movie, index) => (
                     <MovieCard key={movie.id} movie={movie} index={index} />
                 ))}
               </div>
 
               <h1>No te pierdas 2024</h1>
               <div className={styles.scrollContainer}>
-                {movies.findMovies({ year: 2024 }, 8).map((movie: Movie, index) => (
+                {movies.findMovies({ year: 2024 }, 20).map((movie: Movie, index) => (
                     <MovieCard key={movie.id} movie={movie} index={index} />
                 ))}
               </div>
@@ -61,7 +61,6 @@ const MoviesGrid: React.FC = () => {
             </>
         )}
 
-        {/* Mostrar resultados de búsqueda si hay términos ingresados */}
         {searchTerm && (
             <div className={styles.searchResults}>
               <h2>Resultados de búsqueda</h2>
