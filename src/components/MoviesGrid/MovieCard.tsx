@@ -24,7 +24,7 @@ const MovieCard = (movieDetails: MoviewCardInterface) => {
               loading="lazy" // Lazy loading aplicado
           />
           <h2 className={styles.movieTitle}>{movie.name}</h2>
-          <p className={styles.moviePopularity}>⭐ {movie?.year} {movie.subtitled ? ' - Subtitled' : ''}</p>
+          <p className={styles.moviePopularity}>⭐ {movie?.year}</p>
           <p className={styles.movieGenre}>🎭 {movie?.genre.split(',').slice(0, SHOW_TOTAL_GENRES).join(', ')}</p>
         </div>
       </Link>
