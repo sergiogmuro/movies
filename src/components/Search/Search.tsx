@@ -14,7 +14,9 @@ const Search: React.FC<SearchModuleProps> = ({ searchTerm, setSearchTerm }) => {
       <div className={styles.searchContainer}>
         {/* Icono de búsqueda */}
         {!isSearchOpen && (
-            <FaSearch className={styles.searchIcon} onClick={() => setIsSearchOpen(true)} />
+            <button className={styles.transparentBackground} onClick={() => setIsSearchOpen(true)}>
+              <FaSearch className={styles.searchIcon}  />
+            </button>
         )}
 
         {/* Popup de búsqueda */}
