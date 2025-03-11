@@ -6,6 +6,16 @@
   right: 20px;
   z-index: 1000;
 
+
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  background: linear-gradient(#121212, transparent);
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 20px;
+
   .searchIcon {
     cursor: pointer;
     font-size: 24px;
