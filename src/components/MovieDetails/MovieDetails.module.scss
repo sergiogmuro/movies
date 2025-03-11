@@ -133,6 +133,8 @@ a:hover {
   background-color: #f40612;
 }
 
+/* Estilos para pantallas de TV */
+
 @media (min-width: 1400px) {
   .movieTitle {
     font-size: 1.8rem;
@@ -147,10 +149,17 @@ a:hover {
 }
 
 
+
 .backArrow {
   cursor: pointer;
   font-size: 1.5em;
   position: fixed;
   top: 10px;
   left: 10px;
+}
+
+@media (min-width: 1400px) {
+  .backArrow {
+    font-size: 1.8em;
+  }
 }

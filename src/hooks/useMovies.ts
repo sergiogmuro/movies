@@ -93,22 +93,31 @@ const useMovies = () => {
     return limit ? movies.slice(0, limit) : movies;
   };
 
-  const findMovies = (params: SearchParams, limit?: number) => {
+  const findMovies = (params: SearchParams, limit?: number, strict: boolean = false) => {
     let list = movies.filter((movie) => {
       const matchId = params.id ? movie.id === params.id : true;
 
-      const matchTitle = params.title
+      let matchTitle = params.title
           ? movie.name.toLowerCase().includes(params.title.toLowerCase())
           : true;
-      const matchGenre = params.genre
+      let matchGenre = params.genre
           ? movie.genre.toLowerCase().includes(params.genre.toLowerCase())
           : true;
-      const matchCategory = params.category
+      let matchCategory = params.category
           ? movie.categoryName.toLowerCase().includes(params.category.toLowerCase())
           : true;
-      const matchYear = params.year
+      let matchYear = params.year
           ? parseInt(movie.year) === params.year
           : true;
+
+      if (strict) {
+        if (params.category) {
+          matchCategory = movie.categoryName.toLowerCase() == params.category.toLowerCase();
+        }
+        if (params.title) {
+          matchTitle = movie.name.toLowerCase() == params.title.toLowerCase();
+        }
+      }
 
       return matchId && matchTitle && matchGenre && matchYear && matchCategory;
     });
