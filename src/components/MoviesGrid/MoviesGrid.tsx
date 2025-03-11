@@ -59,14 +59,15 @@ const MoviesGrid: React.FC = () => {
         {/* Mostrar resultados de búsqueda */}
         {searchTerm && (
             <div className={styles.searchResults}>
-              <FaArrowLeft
-                  className={styles.backArrow}
-                  onClick={() => setSearchTerm("")}
-              />
+              <button className={styles.backButtonDetails} onClick={() => setSearchTerm("")}>
+                <FaArrowLeft
+                    className={styles.backArrow}
+                />
+              </button>
               <h2>Resultados de búsqueda</h2>
               <div className={styles.grid}>
                 {filteredMovies.map((movie: Movie, index) => (
-                    <MovieCard key={movie.id} movie={movie} index={index} />
+                    <MovieCard key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </div>

@@ -53,10 +53,11 @@ const MovieDetails: React.FC = () => {
               <div className={styles.header}>
                 <img src={movie.image} alt={movie.name} className={styles["movie-image"]}/>
                 <div className={styles["movie-info"]}>
-                  <FaArrowLeft
-                      className={styles.backArrow}
-                      onClick={() => navigate(-1)}
-                  />
+                  <button className={styles.backButtonDetails} onClick={() => navigate(-1)}>
+                    <FaArrowLeft
+                        className={styles.backArrow}
+                    />
+                  </button>
                   <h1 className={styles.title}>{movie.name}</h1>
                   <p className={styles.year}><strong>Año</strong>: {movie.year}</p>
                   <p className={styles.genre}><strong>Género</strong>: {movie.genre.split(',').join(', ')}</p>
