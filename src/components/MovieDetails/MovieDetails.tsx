@@ -6,6 +6,8 @@ import styles from "./MovieDetails.module.scss";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import {FaArrowLeft} from "react-icons/fa";
 
+const APP_NAME = import.meta.env.VITE_APP_NAME || "Movies Tau One";
+
 const MovieDetails: React.FC = () => {
   const {id} = useParams<{ id: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -15,10 +17,18 @@ const MovieDetails: React.FC = () => {
   const navigate = useNavigate();
   const firstButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // Efecto para enfocar el primer botón al cargar la página
   useEffect(() => {
     firstButtonRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    if (movie) {
+      document.title = `${movie.name} | ${APP_NAME}`;
+    }
+    return () => {
+      document.title = APP_NAME;
+    };
+  }, [movie]);
 
   useEffect(() => {
     if (id) {

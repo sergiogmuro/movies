@@ -6,7 +6,7 @@ const BASE_URL = 'https://www.innovatv.store/contenido/';
 const BASE_URL_CONTENT_ORDER = '?C=M;O=D';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-const EXCLUDED_CATEGORIES = ['CINE CAM'];
+const EXCLUDED_CATEGORIES = ['CINE CAM', 'SERIES', 'SERIES 4K'];
 
 const date = new Date();
 const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
@@ -122,7 +122,7 @@ async function scrapeMovie(movieUrl, movieName, categoryName) {
         }
     });
 
-    let imageExtras = await getMovieExtras(movieName);
+    let imageExtras = await getMovieExtras(movieName, movieYear);
 
     let movieYear = extractYear(movieName, files);
     let fileDetails = files.map(file => ({
@@ -202,8 +202,8 @@ async function getGenres() {
 
 let genreMap = {};
 
-async function getMovieExtras(movieName) {
-    const url = `${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(movieName)}`;
+async function getMovieExtras(movieName,movieYear) {
+    const url = `${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(`${movieName} - ${movieYear}`)}`;
 
     try {
         const {data} = await axios.get(url);
