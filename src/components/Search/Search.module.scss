@@ -1,29 +1,23 @@
-
-
 .searchContainer {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-
-
-  width: 100%;
-  display: flex;
-  justify-content: right;
-  background: linear-gradient(#121212, transparent);
   position: fixed;
   top: 0;
   right: 0;
-  padding: 20px;
+  z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  background: linear-gradient(#121212, transparent);
+  padding: 30px;
 
   .searchIcon {
     cursor: pointer;
-    font-size: 24px;
+    font-size: 32px; /* Aumentado para mejor visibilidad en TV */
     color: #fff;
     transition: transform 0.2s ease-in-out;
 
-    &:hover {
-      transform: scale(1.1);
+    &:hover,
+    &:focus {
+      transform: scale(1.2);
     }
   }
 }
@@ -33,38 +27,39 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.85); /* Fondo oscuro con transparencia */
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.7);
   z-index: 1000;
-  width: 80%;
-  max-width: 500px;
+  width: 90%;
+  max-width: 600px;
   text-align: center;
 
   .closeButton {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     background: none;
     border: none;
-    font-size: 22px;
+    font-size: 28px; /* Más grande para mejor visibilidad */
     color: #fff;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: #ff0000;
     }
   }
 
   input {
     width: 100%;
-    padding: 12px;
-    margin-top: 10px;
+    padding: 18px;
+    margin-top: 15px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 10px;
+    font-size: 20px;
     background-color: #333;
     color: #fff;
     text-align: center;
@@ -77,18 +72,20 @@
   }
 
   .searchResults {
-    max-height: 250px;
+    max-height: 300px;
     overflow-y: auto;
-    margin-top: 15px;
+    margin-top: 20px;
 
     .resultItem {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       cursor: pointer;
+      font-size: 22px; /* Tamaño aumentado */
       transition: background 0.2s ease-in-out;
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
+      &:hover,
+      &:focus {
+        background: rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -99,25 +96,29 @@
   border: none;
 }
 
-
-
 .genreList {
   list-style: none;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .genreList li button {
   background: #007bff;
   color: white;
   border: none;
-  padding: 8px 12px;
+  padding: 12px 18px; /* Aumentado para mejor visibilidad */
+  font-size: 20px;
   cursor: pointer;
-  border-radius: 4px;
-}
+  border-radius: 6px;
+  transition: background 0.2s ease-in-out;
 
-.genreList li button:hover {
-  background: #0056b3;
+  &:hover,
+  &:focus {
+    background: #0056b3;
+    transform: scale(1.1);
+  }
 }
