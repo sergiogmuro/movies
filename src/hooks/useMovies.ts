@@ -97,13 +97,13 @@ const useMovies = () => {
     let list = movies.filter((movie) => {
       const matchId = params.id ? movie.id === params.id : true;
 
-      let matchTitle = params.title
+      let matchTitle = params.title?.length
           ? movie.name.toLowerCase().includes(params.title.toLowerCase())
           : true;
-      let matchGenre = params.genre
+      let matchGenre = params.genre?.length
           ? movie.genre.toLowerCase().includes(params.genre.toLowerCase())
           : true;
-      let matchCategory = params.category
+      let matchCategory = params.category?.length
           ? movie.categoryName.toLowerCase().includes(params.category.toLowerCase())
           : true;
       let matchYear = params.year

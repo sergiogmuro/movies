@@ -98,3 +98,26 @@
   background-color: transparent;
   border: none;
 }
+
+
+
+.genreList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.genreList li button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.genreList li button:hover {
+  background: #0056b3;
+}

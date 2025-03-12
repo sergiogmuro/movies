@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import React, {useState} from "react";
+import {FaSearch, FaTimes} from "react-icons/fa";
 import styles from "./Search.module.scss";
 
 interface SearchModuleProps {
   searchTerm: string;
+  genres: string[];
   setSearchTerm: (term: string) => void;
+  setGenreFilter: (genre: string) => void;
 }
 
-const Search: React.FC<SearchModuleProps> = ({ searchTerm, setSearchTerm }) => {
+const Search: React.FC<SearchModuleProps> = ({searchTerm, genres, setSearchTerm, setGenreFilter}) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
@@ -15,7 +17,7 @@ const Search: React.FC<SearchModuleProps> = ({ searchTerm, setSearchTerm }) => {
         {/* Icono de búsqueda */}
         {!isSearchOpen && (
             <button className={styles.transparentBackground} onClick={() => setIsSearchOpen(true)}>
-              <FaSearch className={styles.searchIcon}  />
+              <FaSearch className={styles.searchIcon}/>
             </button>
         )}
 
@@ -23,7 +25,7 @@ const Search: React.FC<SearchModuleProps> = ({ searchTerm, setSearchTerm }) => {
         {isSearchOpen && (
             <div className={styles.searchPopup}>
               <button className={styles.closeButton} onClick={() => setIsSearchOpen(false)}>
-                <FaTimes />
+                <FaTimes/>
               </button>
               <input
                   type="text"
@@ -32,10 +34,17 @@ const Search: React.FC<SearchModuleProps> = ({ searchTerm, setSearchTerm }) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   autoFocus
               />
+              <ul className={styles.genreList}>
+                {genres.map((cat: string) => (
+                    <li key={cat}>
+                      <button onClick={() => setGenreFilter(cat)}>{cat}</button>
+                    </li>
+                ))}
+              </ul>
             </div>
         )}
       </div>
   );
 };
 
-export default Search
+export default Search;

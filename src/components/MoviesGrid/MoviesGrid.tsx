@@ -7,9 +7,14 @@ import Search from "../Search/Search";
 import {FaArrowLeft} from "react-icons/fa";
 
 const MoviesGrid: React.FC = () => {
+  const moviesList = useState<Movie[]>({});
   const movies = useMovies();
   const [searchTerm, setSearchTerm] = useState("");
+  const [genreFilter, setGenreFilter] = useState("");
 
+  function onlyUnique(value, index, array) {
+    return array.indexOf(value) === index;
+  }
   const uniqueMovies = (moviesList: Movie[]) => {
     const movieMap = new Map();
 
@@ -23,15 +28,19 @@ const MoviesGrid: React.FC = () => {
     return Array.from(movieMap.values());
   };
 
-  const filteredMovies = searchTerm ? uniqueMovies(movies.findMovies({ title: searchTerm })) : [];
+  const filteredMovies = (searchTerm || genreFilter) ? uniqueMovies(movies.findMovies({
+    title: searchTerm || undefined,
+    genre: genreFilter || undefined
+  })) : [];
+  const genres = movies ? uniqueMovies(movies.getMovies()).flatMap((movie: Movie) => movie.genre.split(',')).filter(onlyUnique).filter(g => g.length).slice(0, 10) : [];
 
   return (
       <div className={styles.container}>
         {/* Componente de Búsqueda */}
-        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Search searchTerm={searchTerm} genres={genres} setSearchTerm={setSearchTerm}setGenreFilter={setGenreFilter} />
 
         {/* Mostrar películas si no hay búsqueda */}
-        {!searchTerm && (
+        {filteredMovies.length === 0 && (
             <>
               <h1>No te pierdas 2025</h1>
               <div className={styles.scrollContainer}>
@@ -57,7 +66,7 @@ const MoviesGrid: React.FC = () => {
         )}
 
         {/* Mostrar resultados de búsqueda */}
-        {searchTerm && (
+        {filteredMovies.length && (
             <div className={styles.searchResults}>
               <button className={styles.backButtonDetails} onClick={() => setSearchTerm("")}>
                 <FaArrowLeft
