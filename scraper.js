@@ -38,14 +38,24 @@ const csvWriter = createObjectCsvWriter({
     ]
 });
 
-async function fetchHTML(url) {
-    try {
-        const {data} = await axios.get(url);
-        return cheerio.load(data);
-    } catch (error) {
-        console.error(`❌ Error al obtener ${url}:`, error.message);
-        return null;
+async function fetchHTML(url, retries = 3, delay = 5000) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const { data } = await axios.get(url);
+            return cheerio.load(data);
+        } catch (error) {
+            console.error(`❌ Intento ${attempt} fallido al obtener ${url}:`, error.message);
+
+            if (attempt < retries) {
+                const waitTime = delay * Math.pow(2, attempt - 1); // 5s, 10s, 20s
+                console.log(`🔄 Reintentando en ${waitTime / 1000} segundos...`);
+                await new Promise(res => setTimeout(res, waitTime));
+            } else {
+                console.log(`❌ Falló después de ${retries} intentos.`);
+            }
+        }
     }
+    return null;
 }
 
 async function scrapeIndex() {
@@ -122,9 +132,9 @@ async function scrapeMovie(movieUrl, movieName, categoryName) {
         }
     });
 
+    let movieYear = extractYear(movieName, files);
     let imageExtras = await getMovieExtras(movieName, movieYear);
 
-    let movieYear = extractYear(movieName, files);
     let fileDetails = files.map(file => ({
         movieName,
         categoryName,
@@ -202,13 +212,19 @@ async function getGenres() {
 
 let genreMap = {};
 
-async function getMovieExtras(movieName,movieYear) {
-    const url = `${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(`${movieName} - ${movieYear}`)}`;
+async function getMovieExtras(movieName, movieYear) {
+    const url = `${TMDB_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(movieName.replace('.', ' ').trim())}`;
 
     try {
         const {data} = await axios.get(url);
         if (data.results.length > 0) {
-            const movie = data.results[0];
+            // Intentamos encontrar una película con el mismo año de lanzamiento
+            let movie = data.results.find(m => m.release_date && m.release_date.startsWith(movieYear));
+
+            if (!movie) {
+                movie = data.results[0];
+            }
+
             const imageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
             const genres = movie.genre_ids.map(id => genreMap[id] || 'Desconocido');
 
