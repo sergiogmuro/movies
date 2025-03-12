@@ -66,7 +66,7 @@ const MoviesGrid: React.FC = () => {
         )}
 
         {/* Mostrar resultados de búsqueda */}
-        {filteredMovies.length && (
+        {filteredMovies.length > 0 && (
             <div className={styles.searchResults}>
               <button className={styles.backButtonDetails} onClick={() => setSearchTerm("")}>
                 <FaArrowLeft

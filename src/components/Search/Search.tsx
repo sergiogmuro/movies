@@ -35,7 +35,7 @@ const Search: React.FC<SearchModuleProps> = ({searchTerm, genres, setSearchTerm,
                   autoFocus
               />
               <ul className={styles.genreList}>
-                {genres.map((cat: string) => (
+                {genres.sort().map((cat: string) => (
                     <li key={cat}>
                       <button onClick={() => setGenreFilter(cat)}>{cat}</button>
                     </li>
