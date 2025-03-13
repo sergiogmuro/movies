@@ -5,7 +5,7 @@ import {Movie} from "../../../types/Movie";
 
 const MovieCardLazy: React.FC<{ movie: Movie; index: number }> = ({movie, index}) => {
   const {ref, isVisible} = useLazyLoad();
-
+console.log(ref);
   return (
       <div ref={ref}>
         {isVisible ? <MovieCard movie={movie} index={index}/> : ''}
