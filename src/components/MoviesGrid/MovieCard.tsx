@@ -10,7 +10,7 @@ interface MovieCardProps {
 
 const SHOW_TOTAL_GENRES = 2;
 
-const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
+const MovieCard: React.FC<MovieCardProps> = React.memo(({movie}) => {
   return (
       <Link to={`/movie/${movie.id}`}>
         <div className={styles.movieCard}>
@@ -30,6 +30,6 @@ const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
         </div>
       </Link>
   );
-};
+});
 
 export default MovieCard;

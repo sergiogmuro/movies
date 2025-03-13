@@ -1,11 +1,12 @@
-import React, {useState, useMemo, useCallback} from "react";
+import React, {useState, useMemo, useCallback, Suspense} from "react";
 import useMovies, {Categories} from "../../hooks/useMovies";
 import {Movie} from "../../../types/Movie";
 import styles from "./MoviesGrid.module.scss";
-import MovieCard from "./MovieCard";
+const MovieCard = React.lazy(() => import("./MovieCard"));
 import Search from "../Search/Search";
 import {FaArrowLeft} from "react-icons/fa";
 import Loading from "../Loading/Loading";
+import MovieCardLazy from "./MovieCardLazy";
 
 const MoviesGrid: React.FC = () => {
   const movies = useMovies();
@@ -13,32 +14,30 @@ const MoviesGrid: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [genreFilter, setGenreFilter] = useState("");
 
-  const uniqueMovies = useCallback((moviesList: Movie[]) => {
-    const movieMap = new Map();
-    moviesList.forEach((movie) => {
-      const key = `${movie.name}-${movie.year}`;
-      if (!movieMap.has(key) || movie.subtitled) {
-        movieMap.set(key, movie);
-      }
-    });
-    return Array.from(movieMap.values());
+  const uniqueMovies = useMemo(() => {
+    return (moviesList: Movie[]) => {
+      const movieMap = new Map();
+      moviesList.forEach((movie) => {
+        const key = `${movie.name}-${movie.year}`;
+        if (!movieMap.has(key) || movie.subtitled) {
+          movieMap.set(key, movie);
+        }
+      });
+      return Array.from(movieMap.values());
+    };
   }, []);
 
-  const filteredMovies = useMemo(() =>
-          searchTerm || genreFilter
-              ? uniqueMovies(movies.findMovies({title: searchTerm || undefined, genre: genreFilter || undefined}))
-              : [],
-      [searchTerm, genreFilter, movies, uniqueMovies]
-  );
+  const filteredMovies = useMemo(() => {
+    if (!searchTerm && !genreFilter) return [];
+    return uniqueMovies(movies.findMovies({title: searchTerm || undefined, genre: genreFilter || undefined}));
+  }, [searchTerm, genreFilter, movies]);
 
-  const genres = useMemo(() =>
-          uniqueMovies(movies.getMovies())
-              .flatMap((movie) => movie.genre.split(','))
-              .filter((value, index, array) => array.indexOf(value) === index)
-              .filter((g) => g.length)
-              .slice(0, 10),
-      [movies, uniqueMovies]
-  );
+  const genres = useMemo(() => {
+    return uniqueMovies(movies.getMovies())
+        .flatMap((movie) => movie.genre?.split(',') ?? [])
+        .filter((value, index, array) => array.indexOf(value) === index)
+        .slice(0, 10);
+  }, [movies]);
 
   const resetFilters = () => {
     setSearchTerm("");
@@ -67,7 +66,7 @@ const MoviesGrid: React.FC = () => {
               <h1>Películas</h1>
               <div className={styles.grid}>
                 {uniqueMovies(movies.findMovies({category: Categories.movies})).map((movie, index) => (
-                    <MovieCard key={movie.id} movie={movie} index={index}/>
+                    <MovieCardLazy key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </>
@@ -79,7 +78,7 @@ const MoviesGrid: React.FC = () => {
               <h2>Resultados de búsqueda</h2>
               <div className={styles.grid}>
                 {filteredMovies.map((movie, index) => (
-                    <MovieCard key={movie.id} movie={movie} index={index}/>
+                    <MovieCardLazy key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </div>
