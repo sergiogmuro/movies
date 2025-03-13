@@ -7,7 +7,7 @@ export default function useLazyLoad() {
   useEffect(() => {
     const observer = new IntersectionObserver(
         ([entry]) => setIsVisible(entry.isIntersecting),
-        { rootMargin: "600px" }
+        { rootMargin: "2000px" }
     );
 
     if (ref.current) observer.observe(ref.current);
