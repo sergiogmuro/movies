@@ -3,9 +3,10 @@ import useLazyLoad from "../../hooks/useLazyLoad";
 import MovieCard from "./MovieCard";
 import {Movie} from "../../../types/Movie";
 
+// MAYBE DEPRECATED
 const MovieCardLazy: React.FC<{ movie: Movie; index: number }> = ({movie, index}) => {
   const {ref, isVisible} = useLazyLoad();
-console.log(ref);
+
   return (
       <div ref={ref}>
         {isVisible ? <MovieCard movie={movie} index={index}/> : ''}

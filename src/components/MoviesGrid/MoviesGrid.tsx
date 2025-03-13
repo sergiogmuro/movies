@@ -66,7 +66,7 @@ const MoviesGrid: React.FC = () => {
               <h1>Películas</h1>
               <div className={styles.grid}>
                 {uniqueMovies(movies.findMovies({category: Categories.movies})).map((movie, index) => (
-                    <MovieCardLazy key={movie.id} movie={movie} index={index}/>
+                    <MovieCard key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </>
@@ -78,7 +78,7 @@ const MoviesGrid: React.FC = () => {
               <h2>Resultados de búsqueda</h2>
               <div className={styles.grid}>
                 {filteredMovies.map((movie, index) => (
-                    <MovieCardLazy key={movie.id} movie={movie} index={index}/>
+                    <MovieCard key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </div>
