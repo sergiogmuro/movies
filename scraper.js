@@ -228,11 +228,7 @@ async function getMovieCertifications(movieId) {
     const url = `${TMDB_BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=es&append_to_response=releases`;
     try {
         return axios.get(url).then(data => {
-            const genres = data.data.genres;
-            return genres.reduce((map, genre) => {
-                map[genre.id] = genre.name;
-                return map;
-            }, {});
+            console.log(data);return ;
         })
     } catch (error) {
         console.error('❌ Error al obtener los géneros:', error.message);
@@ -254,6 +250,10 @@ async function getMovieExtras(movieName, movieYear) {
             if (!movie) {
                 movie = data.results[0];
             }
+
+            // const movieId = movie.id;
+
+            // movie = getMovieCertifications(movieId);
 
             const imageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
             const genres = movie.genre_ids.map(id => genreMap[id] || 'Desconocido');

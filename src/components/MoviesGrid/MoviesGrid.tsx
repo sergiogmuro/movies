@@ -1,13 +1,15 @@
-import React, { useState, useMemo, useCallback } from "react";
-import useMovies, { Categories } from "../../hooks/useMovies";
-import { Movie } from "../../../types/Movie";
+import React, {useState, useMemo, useCallback} from "react";
+import useMovies, {Categories} from "../../hooks/useMovies";
+import {Movie} from "../../../types/Movie";
 import styles from "./MoviesGrid.module.scss";
 import MovieCard from "./MovieCard";
 import Search from "../Search/Search";
-import { FaArrowLeft } from "react-icons/fa";
+import {FaArrowLeft} from "react-icons/fa";
+import Loading from "../Loading/Loading";
 
 const MoviesGrid: React.FC = () => {
   const movies = useMovies();
+  const loading = movies.loading;
   const [searchTerm, setSearchTerm] = useState("");
   const [genreFilter, setGenreFilter] = useState("");
 
@@ -24,7 +26,7 @@ const MoviesGrid: React.FC = () => {
 
   const filteredMovies = useMemo(() =>
           searchTerm || genreFilter
-              ? uniqueMovies(movies.findMovies({ title: searchTerm || undefined, genre: genreFilter || undefined }))
+              ? uniqueMovies(movies.findMovies({title: searchTerm || undefined, genre: genreFilter || undefined}))
               : [],
       [searchTerm, genreFilter, movies, uniqueMovies]
   );
@@ -38,9 +40,16 @@ const MoviesGrid: React.FC = () => {
       [movies, uniqueMovies]
   );
 
+  const resetFilters = () => {
+    setSearchTerm("");
+    setGenreFilter("")
+  }
+
+
   return (
       <div className={styles.container}>
-        <Search searchTerm={searchTerm} genres={genres} setSearchTerm={setSearchTerm} setGenreFilter={setGenreFilter} />
+        <Loading isLoaded={loading}/>
+        <Search searchTerm={searchTerm} genres={genres} setSearchTerm={setSearchTerm} setGenreFilter={setGenreFilter}/>
 
         {!filteredMovies.length ? (
             <>
@@ -48,8 +57,8 @@ const MoviesGrid: React.FC = () => {
                   <section key={year}>
                     <h1>No te pierdas {year}</h1>
                     <div className={styles.scrollContainer}>
-                      {uniqueMovies(movies.findMovies({ year: Number(year) }, 20)).map((movie, index) => (
-                          <MovieCard key={movie.id} movie={movie} index={index} />
+                      {uniqueMovies(movies.findMovies({year: Number(year)}, 20)).map((movie, index) => (
+                          <MovieCard key={movie.id} movie={movie} index={index}/>
                       ))}
                     </div>
                   </section>
@@ -57,20 +66,20 @@ const MoviesGrid: React.FC = () => {
 
               <h1>Películas</h1>
               <div className={styles.grid}>
-                {uniqueMovies(movies.findMovies({ category: Categories.movies })).map((movie, index) => (
-                    <MovieCard key={movie.id} movie={movie} index={index} />
+                {uniqueMovies(movies.findMovies({category: Categories.movies})).map((movie, index) => (
+                    <MovieCard key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </>
         ) : (
             <div className={styles.searchResults}>
-              <button className={styles.backButtonDetails} onClick={() => setSearchTerm("")}>
-                <FaArrowLeft className={styles.backArrow} />
+              <button className={styles.backButtonDetails} onClick={() => resetFilters()}>
+                <FaArrowLeft className={styles.backArrow}/>
               </button>
               <h2>Resultados de búsqueda</h2>
               <div className={styles.grid}>
                 {filteredMovies.map((movie, index) => (
-                    <MovieCard key={movie.id} movie={movie} index={index} />
+                    <MovieCard key={movie.id} movie={movie} index={index}/>
                 ))}
               </div>
             </div>

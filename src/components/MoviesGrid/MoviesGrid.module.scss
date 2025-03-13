@@ -27,61 +27,65 @@ a:hover {
   }
 }
 
-.movieCard {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  justify-content: space-between;
-  padding: 1rem; /* en lugar de 12px */
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 420px;
-  height: 90%;
-  margin: 0 auto;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+//.movieCard {
+//  border: 2px solid #a8a8a8;
+//  //border-radius: 8px;
+//  justify-content: space-between;
+//  padding: 1rem; /* en lugar de 12px */
+//  //background-color: white;
+//  background: linear-gradient(white 85%, #a8a8a8);
+//  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//  width: 90%;
+//  max-width: 420px;
+//  height: 90%;
+//  margin: 0 auto;
+//  //transition: transform 0.3s ease, box-shadow 0.3s ease;
+//}
 
 .movieCard:hover {
-  transform: translateY(-5px);
+  //transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.movieImage {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-}
+//.movieImage {
+//  width: 100%;
+//  height: 180px;
+//  object-fit: cover;
+//  //border-radius: 8px;
+//}
 
 /* 🎬 Títulos más grandes en pantallas grandes */
-.movieTitle {
-  font-size: clamp(1rem, 2vw, 1.5rem); /* Ajusta entre 16px y 24px */
-  font-weight: bold;
-  margin-top: 8px;
-  color: #333;
-  text-align: center;
-  height: 40px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-}
+//.movieTitle {
+//  font-size: clamp(1rem, 2vw, 1.5rem); /* Ajusta entre 16px y 24px */
+//  font-weight: bold;
+//  margin-top: 8px;
+//  color: #333;
+//  text-align: center;
+//  height: 40px;
+//  overflow: hidden;
+//  text-overflow: ellipsis;
+//  white-space: nowrap;
+//}
 
 /* 🎭 Género con mejor legibilidad */
-.movieGenre {
-  color: #4b5563;
-  font-size: clamp(0.875rem, 1.5vw, 1.25rem); /* Ajusta entre 14px y 20px */
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-/* ⭐ Popularidad con más impacto */
-.moviePopularity {
-  color: #252525;
-  font-size: clamp(0.875rem, 1.5vw, 1.5rem); /* Ajusta entre 14px y 24px */
-  text-align: center;
-  font-weight: bold;
-}
+//.movieGenre {
+//  color: #4b5563;
+//  font-size: clamp(0.875rem, 1.5vw, 1.25rem); /* Ajusta entre 14px y 20px */
+//  text-align: center;
+//  margin-bottom: 4px;
+//  height: 40px;
+//  overflow: hidden;
+//  text-overflow: ellipsis;
+//  white-space: nowrap;
+//}
+//
+///* ⭐ Popularidad con más impacto */
+//.moviePopularity {
+//  color: #252525;
+//  font-size: clamp(0.875rem, 1.5vw, 1.5rem); /* Ajusta entre 14px y 24px */
+//  text-align: center;
+//  font-weight: bold;
+//}
 
 .search-container {
   position: absolute;
@@ -99,8 +103,8 @@ a:hover {
   border: none;
 
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 16px;
+  left: 16px;
   color: white;
   z-index: 9999;
 }
@@ -139,35 +143,138 @@ a:hover {
   padding-bottom: 10px;
   scrollbar-width: none; // Oculta scrollbar en Firefox
   -ms-overflow-style: none; // Oculta scrollbar en IE y Edge;
+
+    .movieCard {
+      flex: 0 0 auto;
+      width: 200px; // Ancho fijo de cada tarjeta
+      transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out;
+      //transition: transform 0.1s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out;
+      //border-radius: 10px;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .movieCard:hover {
+      //transform: scale(1.02);
+      border: 2px solid #ff9800; // Color de borde al hacer hover
+      background-color: #ececec;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px 0;
+      padding: 10px;
+    }
 }
 
 .scrollContainer::-webkit-scrollbar {
   display: none; // Oculta scrollbar en Chrome y Safari
 }
 
-.movieCard {
-  flex: 0 0 auto;
-  width: 200px; // Ancho fijo de cada tarjeta
-  transition: transform 0.1s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  border-radius: 10px;
-  overflow: hidden;
-}
+//.movieCard {
+//  flex: 0 0 auto;
+//  width: 200px; // Ancho fijo de cada tarjeta
+//  transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out;
+//  //transition: transform 0.1s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out;
+//  //border-radius: 10px;
+//  overflow: hidden;
+//}
+//
+//.movieCard:hover {
+//  //transform: scale(1.02);
+//  border: 2px solid #ff9800; // Color de borde al hacer hover
+//  background-color: #ececec;
+//}
+//
+//.grid {
+//  display: grid;
+//  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+//  gap: 20px 0;
+//  padding: 10px;
+//}
 
-.movieCard:hover {
-  transform: scale(1.02);
-  border: 2px solid #ff9800; // Color de borde al hacer hover
-  background-color: #ececec;
-}
+
+
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px 0;
+  gap: 20px;
   padding: 10px;
 }
-
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
+
+.movieCard {
+  position: relative;
+  border: 2px solid transparent;
+  //width: 100%;
+  //height: 300px; /* Ajusta la altura según necesites */
+  max-width: 420px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: 100%;
+}
+.movieCard:hover {
+  //transform: scale(1.02);
+  border: 2px solid #ff9800; // Color de borde al hacer hover
+  background-color: #ececec;
+}
+.movieImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.movieDetails {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 45%; /* Ajusta la altura del degradado */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 50%, transparent);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px;
+  text-align: center;
+}
+
+.movieTitle {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
+  width: 85%;
+  margin-bottom: 60px;
+  color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  text-align: left;
+}
+
+.movieGenre,
+.moviePopularity {
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+  width: 90%;
+  height: 40px;
+  color: #ddd;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  text-align: left;
+}
+.moviePopularity {
+  bottom: 2px;
+}
+.movieGenre {
+  bottom: -20px;
+}
+

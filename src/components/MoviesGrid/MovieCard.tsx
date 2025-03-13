@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import styles from "./MoviesGrid.module.scss";
 import React from "react";
-import { Movie } from "../../../types/Movie";
+import {Movie} from "../../../types/Movie";
 
 interface MovieCardProps {
   movie: Movie;
@@ -10,7 +10,7 @@ interface MovieCardProps {
 
 const SHOW_TOTAL_GENRES = 2;
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
   return (
       <Link to={`/movie/${movie.id}`}>
         <div className={styles.movieCard}>
@@ -20,11 +20,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
               className={styles.movieImage}
               loading="lazy"
           />
-          <h2 className={styles.movieTitle}>{movie.name}</h2>
-          <p className={styles.moviePopularity}>{movie.year}</p>
-          <p className={styles.movieGenre}>
-            {movie.genre.split(",").slice(0, SHOW_TOTAL_GENRES).join(", ")}
-          </p>
+          <div className={styles.movieDetails}>
+            <h2 className={styles.movieTitle}>{movie.name}</h2>
+            <p className={styles.moviePopularity}>{movie.year}</p>
+            <p className={styles.movieGenre}>
+              {movie.genre.split(",").slice(0, SHOW_TOTAL_GENRES).join(", ")}
+            </p>
+          </div>
         </div>
       </Link>
   );

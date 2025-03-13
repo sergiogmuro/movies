@@ -5,8 +5,7 @@ import useMovies from "../../hooks/useMovies";
 import styles from "./MovieDetails.module.scss";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import {FaArrowLeft} from "react-icons/fa";
-
-const APP_NAME = import.meta.env.VITE_APP_NAME || "Movies Tau One";
+import { APP_NAME } from "../../App";
 
 const MovieDetails: React.FC = () => {
   const {id} = useParams<{ id: string }>();

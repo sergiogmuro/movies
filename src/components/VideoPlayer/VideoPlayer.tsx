@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./VideoPlayer.module.scss";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaTimes } from "react-icons/fa";
+import { APP_NAME } from "../../App";
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -24,6 +25,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, movieTitle, onExit 
     }
     hideControls(); // Iniciar el temporizador para ocultar los controles
   }, []);
+
+  useEffect(() => {
+    if (movieTitle) {
+      document.title = `(Reproduciendo) ${movieTitle} | ${APP_NAME}`;
+    }
+    return () => {
+      document.title = `(Reproduciendo) | ${APP_NAME}`;
+    };
+  }, [movieTitle]);
 
   // Ocultar controles después de 5 segundos
   const hideControls = () => {

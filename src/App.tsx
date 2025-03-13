@@ -6,7 +6,8 @@ import MovieDetails from "./components/MovieDetails/MovieDetails";
 
 import './_App.css';
 
-const APP_NAME = import.meta.env.VITE_APP_NAME || "Movies Tau One";
+export const APP_NAME = import.meta.env.VITE_APP_NAME || "Movies Tau One";
+export const APP_SLOGAN = import.meta.env.VITE_APP_SLOGAN || "";
 
 const App: React.FC = () => {
 

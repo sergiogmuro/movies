@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FaSearch, FaTimes} from "react-icons/fa";
 import styles from "./Search.module.scss";
+import { APP_NAME } from "../../App";
 
 interface SearchModuleProps {
   searchTerm: string;
@@ -11,6 +12,14 @@ interface SearchModuleProps {
 
 const Search: React.FC<SearchModuleProps> = ({searchTerm, genres, setSearchTerm, setGenreFilter}) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      document.title = `Buscador | ${APP_NAME}`;
+    } else {
+      document.title = `${APP_NAME}`;
+    }
+  }, [isSearchOpen]);
 
   return (
       <div className={styles.searchContainer}>

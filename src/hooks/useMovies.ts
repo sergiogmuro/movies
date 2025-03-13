@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {Movie} from "../../types/Movie";
+import { useEffect, useState } from "react";
+import { Movie } from "../../types/Movie";
 import readMoviesFromCSV from "../../utils/csvReader";
 
 export const Categories = {
@@ -21,7 +21,7 @@ const MOVIES_CSV_PATH = import.meta.env.VITE_MOVIES_CSV_PATH || "/public/movies.
 
 const useMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);  // Estado de carga
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const useMovies = () => {
 
   const fetchMoviesLocal = async () => {
     try {
+      setLoading(true); // Activar estado de carga antes de hacer la petición
       const response = await fetch(MOVIES_CSV_PATH);
       const text = await response.text();
 
@@ -69,23 +70,24 @@ const useMovies = () => {
       });
 
       setMovies(movies);
-      setLoading(false);
+      setLoading(false); // Desactivar estado de carga una vez que los datos estén listos
     } catch (err) {
       setError("Error al cargar las películas");
-      setLoading(false);
+      setLoading(false); // Asegurarse de desactivar el estado de carga en caso de error
     }
   };
 
   const fetchMovies = async () => {
     try {
+      setLoading(true); // Activar estado de carga antes de hacer la petición
       const response = await fetch("/movies");
       const data = await response.json();
 
       setMovies(data);
-      setLoading(false);
+      setLoading(false); // Desactivar estado de carga una vez que los datos estén listos
     } catch (err) {
       setError("Error al cargar las películas");
-      setLoading(false);
+      setLoading(false); // Asegurarse de desactivar el estado de carga en caso de error
     }
   };
 
@@ -131,6 +133,7 @@ const useMovies = () => {
 
   return {
     movies,
+    loading,
     getMovies,
     findMovies,
     getMoviesWithParams,

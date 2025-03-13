@@ -1,0 +1,43 @@
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  scale: 2;
+  flex-flow: column;
+  transition: opacity 1s ease-out; /* Transición suave para el fade-out */
+  transition-delay: 1s;
+  opacity: 1; /* Comienza visible */
+  position: fixed;
+  z-index: 9999999;
+  background: black;
+}
+
+.fadeOut {
+  opacity: 0;
+}
+
+.loadingLogo {
+  width: 100px;
+  height: 100px;
+}
+
+.loadingAppLogoContainer {
+  position: relative;
+  left: -30px;
+  top: 20px;
+}
+
+.loadingTextContainer {
+  position: relative;
+  left: 30px;
+}
+
+.loadingAppName {
+  font-size: 1.2em;
+}
+
+.loadingAppSlogan {
+  font-size: 0.6em;
+}
