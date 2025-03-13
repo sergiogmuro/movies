@@ -1,8 +1,9 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/movie/:id",
-      "destination": "/"
+      "source": "/:path*",
+      "destination": "/index.html",
+      "permanent": false
     }
   ]
 }
