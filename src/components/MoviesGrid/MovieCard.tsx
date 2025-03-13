@@ -12,8 +12,8 @@ const SHOW_TOTAL_GENRES = 2;
 
 const MovieCard: React.FC<MovieCardProps> = React.memo(({movie, index}) => {
   return (
-      <Link to={`/movie/${movie.id}`} tabIndex={index}>
-        <div className={styles.movieCard}>
+      <Link to={`/movie/${movie.id}`}>
+        <div className={styles.movieCard}  tabIndex={index}>
           <img
               src={movie.image.replace("t/p/original", "t/p/w200")}
               alt={movie.name}
