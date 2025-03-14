@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { Movie } from "../../types/Movie";
+import {useEffect, useState} from "react";
+import {Movie} from "../../types/Movie";
 import readMoviesFromCSV from "../../utils/csvReader";
+import Papa from 'papaparse';
 
 export const Categories = {
   "movies": 'Peliculas',
@@ -9,6 +10,7 @@ export const Categories = {
 
 interface SearchParams {
   id?: number;
+  hash?: string;
   title?: string;
   genre?: string;
   category?: string;
@@ -34,40 +36,46 @@ const useMovies = () => {
 
   const fetchMoviesLocal = async () => {
     try {
-      setLoading(true); // Activar estado de carga antes de hacer la petición
+      setLoading(true);
+
       const response = await fetch(MOVIES_CSV_PATH);
       const text = await response.text();
 
-      const rows = text.split("\n").slice(1).filter(row => row.trim() !== "");
-      const movies = rows.map((row, index) => {
-        const regex = /"(.*?)"|\s*([^",]+)\s*/g;
-        const columns = [];
-        let match;
+      // Usa PapaParse para manejar correctamente el CSV
+      const { data } = Papa.parse(text, {
+        header: false, // No hay encabezados en el archivo
+        skipEmptyLines: true,
+        delimiter: ",", // Separador CSV estándar
+        quoteChar: '"', // Respeta valores entre comillas
+      });
 
-        while ((match = regex.exec(row)) !== null) {
-          columns.push(match[1] || match[2]);
-        }
-
+      const movies = data.map((columns, index) => {
         return {
           id: index,
-          name: columns[0] ?? "",
-          categoryName: columns[1] ?? "",
-          year: columns[2] ?? "",
-          file: columns[3] ?? "",
-          resolution: columns[4] ?? "",
-          language: columns[5] ?? "",
-          subtitled: columns[6] === "true",
-          url: columns[7] ?? "",
-          image: columns[8] || "https://www.shutterstock.com/image-vector/image-icon-600nw-211642900.jpg",
-          adult: columns[9] ?? "",
-          genre: columns[10] ?? "",
-          overview: columns[11] ?? "",
-          originalTitle: columns[12] ?? "",
-          originalLanguage: columns[13] ?? "",
-          releaseDate: columns[14] ?? "",
-          popularity: columns[15] ?? "",
+          hash: columns[0] ?? "",
+          name: columns[1] ?? "",
+          categoryName: columns[2] ?? "",
+          year: columns[3] ?? "",
+          file: columns[4] ?? "",
+          resolution: columns[5] ?? "",
+          language: columns[6] ?? "",
+          subtitled: columns[7] === "true",
+          url: columns[8] ?? "",
+          image: columns[9] || "https://www.shutterstock.com/image-vector/image-icon-600nw-211642900.jpg",
+          adult: columns[10] ?? "",
+          genre: columns[11] ?? "",
+          overview: columns[12] ?? "",
+          originalTitle: columns[13] ?? "",
+          originalLanguage: columns[14] ?? "",
+          releaseDate: columns[15] ?? "",
+          popularity: columns[16] ?? "",
+          certificationAvg: columns[17] ?? "",
+          certificationCategory: columns[18] ?? "",
+          publishDate: columns[19] ?? "",
         };
       });
+
+      movies.sort((a, b) => parseFloat(b.year + b.popularity) - parseFloat(a.year + a.popularity));
 
       setMovies(movies);
       setLoading(false); // Desactivar estado de carga una vez que los datos estén listos
@@ -95,12 +103,18 @@ const useMovies = () => {
     return limit ? movies.slice(0, limit) : movies;
   };
 
-  const findMovies = (params: SearchParams, limit?: number, strict: boolean = false) => {
+  const findMovies = (params: SearchParams, limit?: number, strict: boolean = false, orderByDesc: keyof Movie = 'year') => {
+    movies.sort((a, b) =>
+        (parseFloat(`${b[orderByDesc]}`) || 0) - (parseFloat(`${a[orderByDesc]}`) || 0) ||
+        parseFloat(b.popularity) - parseFloat(a.popularity)
+    );
+
     let list = movies.filter((movie) => {
       const matchId = params.id ? movie.id === params.id : true;
+      const matchHash = params.hash ? movie.hash === params.hash : true;
 
       let matchTitle = params.title?.length
-          ? movie.name.toLowerCase().includes(params.title.toLowerCase())
+          ? movie.name.toLowerCase().includes(params.title.toLowerCase()) || movie.originalTitle.toLowerCase().includes(params.title.toLowerCase())
           : true;
       let matchGenre = params.genre?.length
           ? movie.genre.toLowerCase().includes(params.genre.toLowerCase())
@@ -121,7 +135,7 @@ const useMovies = () => {
         }
       }
 
-      return matchId && matchTitle && matchGenre && matchYear && matchCategory;
+      return matchHash && matchId && matchTitle && matchGenre && matchYear && matchCategory;
     });
 
     return limit ? list.slice(0, limit) : list;

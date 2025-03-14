@@ -12,7 +12,7 @@ const SHOW_TOTAL_GENRES = 2;
 
 const MovieCard: React.FC<MovieCardProps> = React.memo(({movie, index}) => {
   return (
-      <Link to={`/movie/${movie.id}`}>
+      <Link to={`/movie/${movie.hash}`}>
         <div className={styles.movieCard}  tabIndex={index}>
           <img
               src={movie.image.replace("t/p/original", "t/p/w200")}
@@ -22,7 +22,7 @@ const MovieCard: React.FC<MovieCardProps> = React.memo(({movie, index}) => {
           />
           <div className={styles.movieDetails}>
             <h2 className={styles.movieTitle}>{movie.name}</h2>
-            <p className={styles.moviePopularity}>{movie.year}</p>
+            <p className={styles.moviePopularity}>{movie.year} <span className={styles.certifications}>{movie.certificationCategory}</span></p>
             <p className={styles.movieGenre}>
               {movie.genre.split(",").slice(0, SHOW_TOTAL_GENRES).join(", ")}
             </p>

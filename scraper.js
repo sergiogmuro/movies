@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const crypto = require('crypto');
 const {createObjectCsvWriter} = require('csv-writer');
 
 const BASE_URL = 'https://www.innovatv.store/contenido/';
@@ -16,9 +17,15 @@ const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1)
     .toString()
     .padStart(2, "0")}`;
 
+function generateMovieHash(movieName, movieYear) {
+    const data = `${movieName}-${movieYear}`;
+    return crypto.createHash('sha256').update(data).digest('hex').slice(0, 10); // Acortar a 10 caracteres si es necesario
+}
+
 const csvWriter = createObjectCsvWriter({
     path: 'public/movies_' + formattedDate + '.csv',
     header: [
+        {id: 'hash', title: 'Hash'},
         {id: 'movieName', title: 'Name'},
         {id: 'categoryName', title: 'Category Name'},
         {id: 'year', title: 'Year'},
@@ -35,13 +42,16 @@ const csvWriter = createObjectCsvWriter({
         {id: 'originalLanguage', title: 'Original Language'},
         {id: 'release_date', title: 'Release Date'},
         {id: 'popularity', title: 'Popularity'},
+        {id: 'certificationAvg', title: 'Certification Average'},
+        {id: 'certificationCategory', title: 'Certification Category'},
+        {id: 'publishDate', title: 'Published Date'},
     ]
 });
 
 async function fetchHTML(url, retries = 3, delay = 5000) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-            const { data } = await axios.get(url);
+            const {data} = await axios.get(url);
             return cheerio.load(data);
         } catch (error) {
             console.error(`❌ Intento ${attempt} fallido al obtener ${url}:`, error.message);
@@ -97,7 +107,10 @@ async function scrapeCategory(categoryUrl, categoryName) {
 
     console.log(`📁 ${movies.length} películas encontradas en ${categoryName}:`, movies);
 
+    let processed = 0;
     for (const movie of movies) {
+        processed++
+        console.log(`-- ${processed} de ${movies.length} películas procesadas en ${categoryName}`);
         await scrapeMovie(`${categoryUrl}${movie}/`, movie, categoryName);
     }
 }
@@ -134,8 +147,10 @@ async function scrapeMovie(movieUrl, movieName, categoryName) {
 
     let movieYear = extractYear(movieName, files);
     let imageExtras = await getMovieExtras(movieName, movieYear);
+    const hash = generateMovieHash(movieName, movieYear)
 
     let fileDetails = files.map(file => ({
+        hash,
         movieName,
         categoryName,
         year: movieYear,
@@ -209,6 +224,7 @@ async function getGenres() {
         return {};
     }
 }
+
 async function getCertificationsList() {
     const url = `${TMDB_BASE_URL}/certification/movie/list?api_key=${API_KEY}&language=es`;
     try {
@@ -224,17 +240,68 @@ async function getCertificationsList() {
         return {};
     }
 }
-async function getMovieCertifications(movieId) {
+
+async function fetchMovieData(movieId) {
     const url = `${TMDB_BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=es&append_to_response=releases`;
+
     try {
-        return axios.get(url).then(data => {
-            console.log(data);return ;
-        })
+        const response = await axios.get(url);
+        return response.data;
     } catch (error) {
-        console.error('❌ Error al obtener los géneros:', error.message);
-        return {};
+        console.error('❌ Error al obtener los datos de la película:', error.message);
+        return null;
     }
 }
+
+function calculateMovieCertification(releases) {
+    if (!releases || !releases.countries) {
+        console.warn('⚠️ No se encontraron certificaciones.');
+        return {avgCertification: null, category: ''};
+    }
+
+    // Mapeo de certificaciones a valores numéricos
+    const certificationMap = {
+        'G': 0, 'PG': 7, 'PG-13': 13, 'R': 16, 'NC-17': 18,
+        '0': 0, '6': 6, '7': 7, '10': 10, '12': 12, '13': 13,
+        '14': 14, '15': 15, '16': 16, '18': 18, 'NR': 0, '': 0
+    };
+
+    // Filtrar certificaciones válidas y ordenarlas por fecha más reciente
+    const validCertifications = releases.countries
+        .filter(cert => cert.certification && certificationMap.hasOwnProperty(cert.certification))
+        .sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+
+    if (validCertifications.length === 0) {
+        console.warn('⚠️ No hay certificaciones válidas.');
+        return {avgCertification: null, category: 'Desconocido'};
+    }
+
+    // Calcular el promedio de certificaciones
+    const avgCertification = validCertifications.reduce((sum, cert) =>
+        sum + certificationMap[cert.certification], 0) / validCertifications.length;
+
+    // Determinar la categoría
+    let category = 'Todos';
+    if (avgCertification >= 18) category = '18+';
+    else if (avgCertification >= 16) category = '16+';
+    else if (avgCertification >= 13) category = '13+';
+    else if (avgCertification >= 10) category = '10+';
+    else if (avgCertification >= 7) category = '7+';
+    else category = 'Infantil';
+
+    return {avgCertification: Math.round(avgCertification), category};
+}
+
+async function getMovieCertifications(movieId) {
+    const movieData = await fetchMovieData(movieId);
+    if (!movieData) return null;
+
+    return {
+        movieId,
+        ...calculateMovieCertification(movieData.releases)
+    };
+}
+
 
 let genreMap = {};
 
@@ -251,9 +318,13 @@ async function getMovieExtras(movieName, movieYear) {
                 movie = data.results[0];
             }
 
-            // const movieId = movie.id;
-
-            // movie = getMovieCertifications(movieId);
+            const movieId = movie.id;
+            const movieCertification = await getMovieCertifications(movieId).then((certification) => {
+                return certification;
+            });
+            const movieExtraData = await fetchMovieData(movieId);
+            const overview = (movieExtraData) ? movieExtraData.overview : movie.overview;
+            const title = (movieExtraData) ? movieExtraData.title : movie.title;
 
             const imageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
             const genres = movie.genre_ids.map(id => genreMap[id] || 'Desconocido');
@@ -265,11 +336,15 @@ async function getMovieExtras(movieName, movieYear) {
                 image: imageUrl,
                 adult: movie.adult,
                 genre: genres,
-                overview: movie.overview,
+                overview: overview,
+                movieName: title,
                 originalTitle: movie.original_title,
                 originalLanguage: movie.original_language,
                 release_date: movie.release_date,
                 popularity: movie.popularity,
+                certificationAvg: movieCertification.avgCertification,
+                certificationCategory: `${movieCertification.category.toString()}`,
+                publishDate: new Date().toISOString(),
             }
         } else {
             console.log('❌ No se encontró la película');

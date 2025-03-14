@@ -8,7 +8,7 @@ import {FaArrowLeft} from "react-icons/fa";
 import { APP_NAME } from "../../App";
 
 const MovieDetails: React.FC = () => {
-  const {id} = useParams<{ id: string }>();
+  const {hash} = useParams<{ hash: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [movieDetailsFound, setMovieDetailsFound] = useState<Movie[]>([]);
   const {findMovies} = useMovies();
@@ -30,9 +30,9 @@ const MovieDetails: React.FC = () => {
   }, [movie]);
 
   useEffect(() => {
-    if (id) {
-      const movieId = parseInt(id, 10);
-      const movieDetails = findMovies({id: movieId});
+    if (hash) {
+      const movieId = hash;
+      const movieDetails = findMovies({hash: movieId});
 
       if (movieDetails.length > 0) {
         if (movie !== movieDetails[0]) {
@@ -40,12 +40,12 @@ const MovieDetails: React.FC = () => {
           setMovie(movieDetail);
 
           setMovieDetailsFound(
-              findMovies({title: movieDetail.name, category: movieDetail.categoryName}, 4, true)
+              findMovies({hash: movieDetail.hash, category: movieDetail.categoryName}, 4, true)
           );
         }
       }
     }
-  }, [id, findMovies]);
+  }, [hash, findMovies]);
 
   if (!movie) return <div>Cargando...</div>;
 

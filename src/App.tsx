@@ -21,7 +21,7 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route path="/" element={<MoviesGrid/>}/>
-          <Route path="/movie/:id" element={<MovieDetails/>}/>
+          <Route path="/movie/:hash" element={<MovieDetails/>}/>
         </Routes>
       </Router>
   );

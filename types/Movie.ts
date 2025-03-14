@@ -1,5 +1,6 @@
 export interface Movie {
   id: number;
+  hash: string;
   name: string;
   categoryName: string;
   year: string;
@@ -16,4 +17,7 @@ export interface Movie {
   originalLanguage: string;
   releaseDate: string;
   popularity: string;
+  certificationAvg: number,
+  certificationCategory: string,
+  publishDate: string,
 }
